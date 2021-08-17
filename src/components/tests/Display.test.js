@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Display from './../Display';
@@ -64,8 +64,8 @@ test('when button is clicked, DisplayFunc function is called', async ()=>{
     const button = screen.getByRole('button');
     userEvent.click(button);
     // ASSERT
-    const showContainer = await screen.findAllByTestId('show-container');
-    expect(fakeDisplayFunc).toBeCalledTimes(1);
+    // const showContainer = await screen.findAllByTestId('show-container');
+    await waitFor(() => expect(fakeDisplayFunc).toBeCalledTimes(1));
 });
 
 
