@@ -64,7 +64,6 @@ test('when button is clicked, DisplayFunc function is called', async ()=>{
     const button = screen.getByRole('button');
     userEvent.click(button);
     // ASSERT
-    // const showContainer = await screen.findAllByTestId('show-container');
     await waitFor(() => expect(fakeDisplayFunc).toBeCalledTimes(1));
 });
 
