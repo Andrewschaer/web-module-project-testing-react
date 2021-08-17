@@ -1,26 +1,65 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { getByLabelText, queryAllByTestId, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Show from './../Show';
 
 const testShow = {
     //add in approprate test data structure here.
+    name: 'Turkey',
+    summary: 'Lunch Meats',
+    seasons: [{id:'1', name: 'Turkey goes hunting', episodes: []}, {id:'2', name: 'Turkey goes ice skating', episodes: []}]
 }
 
 test('renders testShow and no selected Season without errors', ()=>{
+    // ACT:
+    render(<Show show={testShow} selectedSeason={'none'}/>)
 });
 
 test('renders Loading component when prop show is null', () => {
+    // ACT:
+    render(<Show show={null}/>)
+    // ARRANGE:
+    const loadingScreen = screen.queryByTestId('loading-container');
+    // ASSERT:
+    expect(loadingScreen).toBeInTheDocument();
 });
 
 test('renders same number of options seasons are passed in', ()=>{
 });
+    // ACT:
+    render(<Show show={testShow} selectedSeason={'none'}/>)
+    // ARRANGE:
+    const selectSeasons = screen.queryAllByTestId('season-option');
+    // ASSERT:
+    expect(selectSeasons).toHaveLength(2);
 
 test('handleSelect is called when an season is selected', () => {
+    // ACT:
+    const fakeHandleSelect = jest.fn()
+    render(<Show show={testShow} selectedSeason={'none'} handleSelect={fakeHandleSelect}/>);
+    // ARRANGE:
+    // const select = screen.queryByRole('select');
+    userEvent.selectOptions(screen.getByLabelText('Select A Season'), ['1'])
+    // ASSERT:
+    expect(fakeHandleSelect).toBeCalledTimes(1);
+
 });
 
 test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
+    // ACT:
+    const { rerender } = render(<Show show={testShow} selectedSeason={'none'}/>);
+    // ARRANGE:
+    let episodes = screen.queryAllByTestId('episodes-container');
+    // ASSERT:
+    expect(episodes).toHaveLength(0);
+    // ARRANGE:
+    rerender(<Show show={testShow} selectedSeason={'1'}/>);
+    episodes = screen.queryAllByTestId('episodes-container');
+    // ASSERT:
+    expect(episodes).toHaveLength(1);
+
+
 });
 
 //Tasks:
